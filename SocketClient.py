@@ -54,20 +54,23 @@ class SocketClient:
         sock.send(self.JSONrequest.encode())
 
         #get response
-        tempMessageFromServer = ""
+        tempCompleteMessageFromServer = ""
+        tempRemainMessageFromServer = ""
         while True:
-            messageFromServer = sock.recv(1)
+            messageFromServer = sock.recv(1024*1024*1024)
             messageFromServer = messageFromServer.decode()
             if(messageFromServer is not None):
-                if(messageFromServer != "\n"):
-                    tempMessageFromServer += messageFromServer
-                else:
-                    if(tempMessageFromServer is not None):
-                        if("done" in str(tempMessageFromServer)):
+                messageFromServer = tempRemainMessageFromServer + messageFromServer
+                tempCompleteMessageFromServer = messageFromServer[0:messageFromServer.rfind('\n')]
+                tempRemainMessageFromServer = messageFromServer[messageFromServer.rfind('\n'):len(messageFromServer)]
+                splitMessage = tempCompleteMessageFromServer.split("\n")
+                for sm in splitMessage:
+                    if(sm is not None):
+                        if(sm == "done"):
                             self.JSONresponse.append(None)
                             break
-                        self.JSONresponse.append(tempMessageFromServer)
-                        tempMessageFromServer = ""
+                        self.JSONresponse.append(sm)
+            
                 
     def getResponse(self):
         if(len(self.JSONresponse)>0):

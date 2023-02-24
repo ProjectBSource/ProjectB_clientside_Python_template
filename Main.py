@@ -60,10 +60,13 @@ def getHigh(response):
         return None
     
 def getDate(response):
-    if "date" in response:
-        return response["date"]
-    else:
-        return None
+    try:
+        if "date" in response:
+            return response["date"]
+        else:
+            return None
+    except:
+        print("response:")
     
 def getLow(response):
     if "low" in response:
@@ -102,5 +105,6 @@ while(True):
             getClose(response),",",
             getTotalVolumn(response)
         )
+
         
         
