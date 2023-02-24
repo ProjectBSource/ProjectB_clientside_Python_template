@@ -8,7 +8,7 @@ class SocketClient:
     clientID = ""
     apiAccessCode = ""
     serverIPaddress = ""
-    serverPort = ""
+    serverPort = "8888"
     JSONrequest = ""
     JSONresponse = []
     
@@ -26,13 +26,17 @@ class SocketClient:
         else:
             self.clientID = result_in_JSON["clientID"]
             self.apiAccessCode = result_in_JSON["accessCode"]
+            result_in_String = requests.post("https://www.projectb.click/ProjectB/GetTheServerIPaddress.php", json = "")
+            result_in_JSON = json.loads(result_in_String.text)
+            if(result_in_JSON["type"] is not None and result_in_JSON["type"]=="error"):
+                raise Exception(result_in_JSON["message"])
+            else:
+                self.serverIPaddress = result_in_JSON["ipaddress"]
             
-    def request(self, serverIPaddress, serverPort, requestObj):
+    def request(self, requestObj):
         if(self.clientID is None or self.apiAccessCode is None):
             print("No available API access code")
         else:
-            self.serverIPaddress = serverIPaddress
-            self.serverPort = serverPort
             requestObj.update({"clientID": self.clientID})
             requestObj.update({"accessCode": self.apiAccessCode})
             self.JSONrequest = ""
@@ -40,7 +44,6 @@ class SocketClient:
                 self.JSONrequest = json.dumps(requestObj)
             t = threading.Thread(target = self.run)
             t.start()
-            t.join()
     
     def run(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

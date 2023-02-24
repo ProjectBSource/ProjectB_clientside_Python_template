@@ -1,4 +1,5 @@
 import json
+import time
 from SocketClient import SocketClient
 
 sc = SocketClient("funganything@gmail.com", "123")
@@ -7,13 +8,13 @@ obj = {
     "market":"Future",
     "index":"YM",
     "startdate":"20210701",
-    "enddate":"20210701",
+    "enddate":"20210801",
     "starttime":"120000",
     "endtime":"130000",
     "interval":"59",
 }
-#sc.request("13.250.98.96", "8888", obj)
-sc.request("localhost", "8888", obj)
+
+sc.request(obj)
 
 
 def getDate(response):
@@ -87,8 +88,8 @@ while(True):
     response = sc.getResponse()
     if(response is None):
         break
-    response = json.loads(response)
     if(len(response)>0):
+        response = json.loads(response)
         print(
             getDate(response),",",
             getTime(response),",",
