@@ -1,110 +1,87 @@
 import json
-import time
-from SocketClient import SocketClient
 
-sc = SocketClient("funganything@gmail.com", "123")
-obj = {
-    "activity":"DataStreaming",
+from ClientSocketControl.SocketClient import SocketClient
+from ClientSocketControl.DataStructure import DataStructure
+from TradeControl.OrderActionConstants.Action import Action
+from TradeControl.TradeController import TradeController
+
+
+#Login here
+dataStreaming = SocketClient("funganything@gmail.com", "123")
+
+#Form JSON object message for data streaming request
+dataStreamingRequest = {
+    "activity":"TickDataStreaming",
     "market":"Future",
     "index":"YM",
-    "startdate":"20210701",
-    "enddate":"20210801",
-    "starttime":"120000",
-    "endtime":"130000",
+    "startdate":"20210630",
+    "enddate":"20210705",
+    "starttime":"000000",
+    "endtime":"235959",
     "interval":"59",
 }
 
-sc.request(obj)
+#Send the request to server
+dataStreaming.request(dataStreamingRequest)
+
+'''
+This template included a simple account and order management function
+You may modify the function to fit your back test
+'''
+tradeController = TradeController()
+tradeController.setSlippage(0.0005)
 
 
-def getDate(response):
-    if "date" in response:
-        return response["date"]
-    else:
-        return None
-    
-def getTime(response):
-    if "time" in response:
-        return response["time"]
-    else:
-        return None
-    
-def getDateTime(response):
-    if "datetime" in response:
-        return response["datetime"]
-    else:
-        return None
-    
-def getIndex(response):
-    if "index" in response:
-        return response["index"]
-    else:
-        return None
-    
-def getVolumn(response):
-    if "volumn" in response:
-        return response["volumn"]
-    else:
-        return None
-    
-def getOpen(response):
-    if "open" in response:
-        return response["open"]
-    else:
-        return None
-    
-def getHigh(response):
-    if "high" in response:
-        return response["high"]
-    else:
-        return None
-    
-def getDate(response):
-    try:
-        if "date" in response:
-            return response["date"]
-        else:
-            return None
-    except:
-        print("response:")
-    
-def getLow(response):
-    if "low" in response:
-        return response["low"]
-    else:
-        return None
-    
-def getClose(response):
-    if "close" in response:
-        return response["close"]
-    else:
-        return None
-    
-def getTotalVolumn(response):
-    if "total volumn" in response:
-        return response["total volumn"]
-    else:
-        return None
-    
+#Initial the ObjectMapper
+mapper = json.JSONDecoder()
+#Initial the JSONObject
+response = None
 
-while(True):
-    response = sc.getResponse()
-    if(response is None):
-        break
-    if(len(response)>0):
-        response = json.loads(response)
+while True:
+    #get the response
+    response = dataStreaming.getResponse()
+    if response:
+        #Convert response JSON message to Python dictionary
+        dataStructure_dict = json.loads(response)
+        dataStructure = DataStructure(**dataStructure_dict)
+        
+        #Check response finished or not
+        if dataStructure.done:
+            break
+        
+        #Check error caused or not
+        if dataStructure.error:
+            print(dataStructure.error)
+            break
+        
+        #check the order allow to trade or not
+        tradeController.tradeCheckingAndBalanceUpdate(dataStructure)
+        
+        '''
+        You may write your back test program below within the while loop
+        >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        '''
+        
         print(
-            getDate(response),",",
-            getTime(response),",",
-            getDateTime(response),",",
-            getIndex(response),",",
-            getVolumn(response),",",
-            getOpen(response),",",
-            getHigh(response),",",
-            getLow(response),",",
-            getClose(response),",",
-            getTotalVolumn(response)
+            "{} {} {} {} {} {} {} {} {}".format(
+                dataStructure.type,
+                dataStructure.datetime,
+                dataStructure.index,
+                dataStructure.volumn,
+                dataStructure.open,
+                dataStructure.high,
+                dataStructure.low,
+                dataStructure.close,
+                dataStructure.total_volumn
+            )
         )
-
+        
+        tradeController.placeOrder(dataStructure.symbol, Action.BUY, 1)
+        
+        print(tradeController.getProfile())
+        
+        '''
+        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        '''
         
         
