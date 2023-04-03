@@ -26,8 +26,8 @@ class TradeController:
         # update profile balance
         self.profile.balance = 0.0
         for symbol, quantity in self.profile.holding.items():
-            if symbol == ds.get_symbol():
-                self.profile.balance += quantity * ds.get_index()
+            if symbol == ds.symbol:
+                self.profile.balance += quantity * ds.index
         self.profile.balance += self.profile.cash
         
         # return
@@ -39,8 +39,8 @@ class TradeController:
     def setSlippage(self, percentage: float):
         self.slippage = percentage
     
-    def placeOrder(self, symbol: str, action: Action, quantity: int, direction=None, sp=None, ed=None):
-        self.orders.append(Order(symbol, action, direction, sp, ed, quantity, None, None))
+    def placeOrder(self, symbol: str, action: str, quantity: int, direction=None, sp=None, ed=None):
+        self.orders.append(Order(symbol, action, direction, sp, ed, quantity, None, None, None, None, False))
     
     def getProfile(self):
         profile_dict = self.profile.__dict__
