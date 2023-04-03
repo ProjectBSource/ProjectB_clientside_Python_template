@@ -76,7 +76,7 @@ while True:
             )
         )
         
-        tradeController.placeOrder(dataStructure.symbol, Action.BUY, 1)
+        tradeController.placeOrder(dataStructure.symbol, Action.BUY.getAction(), 1)
         
         print(tradeController.getProfile())
         
