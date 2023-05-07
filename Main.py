@@ -18,7 +18,7 @@ dataStreamingRequest = {
     "enddate":"20210705",
     "starttime":"000000",
     "endtime":"235959",
-    "interval":"59",
+    "interval":59,
 }
 
 #Send the request to server
