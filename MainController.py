@@ -15,7 +15,7 @@ class MainController(ABC):
     
     def login(self, loginname, password):
         try:
-            self.dataStreaming = SocketClient("funganything@gmail.com", "123")
+            self.dataStreaming = SocketClient(loginname, password)
         except:
             self.dataStreaming = None
             raise Exception("Login fail")
