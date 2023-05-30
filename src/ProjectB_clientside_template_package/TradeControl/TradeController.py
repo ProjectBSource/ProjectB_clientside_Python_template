@@ -1,8 +1,8 @@
 from typing import List, Union
-from ClientSocketControl import DataStructure
-from TradeControl.Order import Order
-from TradeControl.OrderActionConstants import Action, Direction, ExpiryDate, StrikePrice
-from TradeControl.Profile import Profile
+from ProjectB_clientside_template_package.ClientSocketControl import DataStructure
+from ProjectB_clientside_template_package.TradeControl.Order import Order
+from ProjectB_clientside_template_package.TradeControl.OrderActionConstants import Action, Direction, ExpiryDate, StrikePrice
+from ProjectB_clientside_template_package.TradeControl.Profile import Profile
 import json
 import random
 

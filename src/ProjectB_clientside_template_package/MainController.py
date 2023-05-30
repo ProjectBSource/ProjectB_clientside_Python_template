@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 import datetime
-from ClientSocketControl.SocketClient import SocketClient
-from ClientSocketControl.DataStructure import DataStructure
-from TradeControl.OrderActionConstants.Action import Action
-from TradeControl.TradeController import TradeController
+from ProjectB_clientside_template_package.ClientSocketControl.SocketClient import SocketClient
+from ProjectB_clientside_template_package.ClientSocketControl.DataStructure import DataStructure
+from ProjectB_clientside_template_package.TradeControl.OrderActionConstants.Action import Action
+from ProjectB_clientside_template_package.TradeControl.TradeController import TradeController
 
 import json
 

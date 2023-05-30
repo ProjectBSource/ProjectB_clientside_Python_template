@@ -2,9 +2,9 @@ import uuid
 import random
 from datetime import datetime
 from typing import List
-from ClientSocketControl import DataStructure
-from TradeControl.OrderActionConstants import Action, Direction, ExpiryDate, StrikePrice
-from TradeControl.Profile import Profile
+from ProjectB_clientside_template_package.ClientSocketControl import DataStructure
+from ProjectB_clientside_template_package.TradeControl.OrderActionConstants import Action, Direction, ExpiryDate, StrikePrice
+from ProjectB_clientside_template_package.TradeControl.Profile import Profile
 import json
 
 
