@@ -20,36 +20,10 @@ class MainController(ABC):
             self.dataStreaming = None
             raise Exception("Login fail")
     
-    def createDataStreamingRequest(self, activity:str, market:str, index:str, startdate:datetime, enddate:datetime, starttime:datetime, endtime:datetime, interval:int):
+    def createDataStreamingRequest(self, dataStreamingRequest):
         if(self.dataStreaming is None):
             raise Exception("Please login first");
         else:
-            try:
-                datetime.datetime(int(startdate.strftime('%Y')),int(startdate.strftime('%m')),int(startdate.strftime('%d')))
-            except ValueError:
-                raise Exception("startdate invaild")
-            try:
-                datetime.datetime(int(enddate.strftime('%Y')),int(enddate.strftime('%m')),int(enddate.strftime('%d')))
-            except ValueError:
-                raise Exception("enddate invaild")
-            try:
-                datetime.datetime(int(starttime.strftime('%H')),int(starttime.strftime('%M')),int(starttime.strftime('%S')))
-            except ValueError:
-                raise Exception("starttime invaild")
-            try:
-                datetime.datetime(int(endtime.strftime('%H')),int(endtime.strftime('%M')),int(endtime.strftime('%S')))
-            except ValueError:
-                raise Exception("endtime invaild")
-            dataStreamingRequest = {
-                "activity":activity,
-                "market":market,
-                "index":index,
-                "startdate":startdate.strftime('%Y%m%d'),
-                "enddate":enddate.strftime('%Y%m%d'),
-                "starttime":starttime.strftime('%H%M%S'),
-                "endtime":endtime.strftime('%H%M%S'),
-                "interval":int(interval),
-            }
             self.dataStreaming.request(dataStreamingRequest)
             
     def projectBTradeController(slippageRangeInPercentage):
