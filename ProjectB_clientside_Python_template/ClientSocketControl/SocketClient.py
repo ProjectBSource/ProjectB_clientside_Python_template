@@ -18,24 +18,26 @@ class SocketClient:
         obj = {'clientID': loginname, 'password': password}
         data = json.dumps(obj).encode('utf-8')
         result = self.post_request('https://www.projectb.click/ProjectB/APIgetAccessCode.php', data)
-        if 'type' in result and result['type'] == 'error':
-            raise Exception(result['message'])
-        else:
-            self.clientID = result['clientID']
-            self.apiAccessCode = result['accessCode']
-            print('Login successful')
-            self.get_the_server_ip_address()
+        if 'type' in result:
+            if result['type'] == 'error':
+                raise Exception(result['message'])
+            elif result['type'] == 'success':
+                self.clientID = result['clientID']
+                self.apiAccessCode = result['accessCode']
+                print(result['message'])
+                self.get_the_server_ip_address()    
     
     def get_the_server_ip_address(self):
         obj = {'clientID': self.clientID, 'apiAccessCode': self.apiAccessCode}
         data = json.dumps(obj).encode('utf-8')
         result = self.post_request('https://www.projectb.click/ProjectB/GetTheServerIPaddress.php', data)
-        if 'type' in result and result['type'] == 'error':
-            raise Exception(result['message'])
-        else:
-            self.serverIPaddress = result['ipaddress']
-            self.serverPort = result['port']
-            print(f'Server {self.serverIPaddress}, Port {self.serverPort} available')
+        if 'type' in result:
+            if result['type'] == 'error':
+                raise Exception(result['message'])
+            elif result['type'] == 'success':
+                self.serverIPaddress = result['ipaddress']
+                self.serverPort = result['port']
+                print(result['message'])
             
     def request(self, request):
         if self.clientID is None or self.apiAccessCode is None:

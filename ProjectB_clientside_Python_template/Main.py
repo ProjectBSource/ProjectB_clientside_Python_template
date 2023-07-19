@@ -2,6 +2,7 @@ import json
 
 from ClientSocketControl.SocketClient import SocketClient
 from ClientSocketControl.DataStructure import DataStructure
+from Indicators.BollingerBands import BollingerBands
 from TradeControl.OrderActionConstants.Action import Action
 from TradeControl.TradeController import TradeController
 
@@ -13,12 +14,13 @@ dataStreaming = SocketClient("funganything@gmail.com", "123")
 dataStreamingRequest = {
     "activity":"TickDataStreaming",
     "market":"Future",
-    "index":"YM",
-    "startdate":"20210630",
-    "enddate":"20210705",
+    "index":"HSI",
+    "startdate":"20230101",
+    "enddate":"20230531",
     "starttime":"000000",
     "endtime":"235959",
     "interval":59,
+    "mitigateNoiseWithinPrecentage":200
 }
 
 #Send the request to server
@@ -31,6 +33,7 @@ You may modify the function to fit your back test
 tradeController = TradeController()
 tradeController.setSlippage(0.0005)
 
+bollingerBands = BollingerBands(20,2);
 
 #Initial the ObjectMapper
 mapper = json.JSONDecoder()
@@ -40,6 +43,7 @@ response = None
 while True:
     #get the response
     response = dataStreaming.getResponse()
+    
     if response:
         #Convert response JSON message to Python dictionary
         dataStructure_dict = json.loads(response)
@@ -62,8 +66,10 @@ while True:
         >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         '''
         
+        bollingerBands.addPrice(dataStructure.index);
+        
         print(
-            "{} {} {} {} {} {} {} {} {}".format(
+            "{} {} {} {} {} {} {} {} {} {} {} {}".format(
                 dataStructure.type,
                 dataStructure.datetime,
                 dataStructure.index,
@@ -72,13 +78,16 @@ while True:
                 dataStructure.high,
                 dataStructure.low,
                 dataStructure.close,
-                dataStructure.total_volumn
+                dataStructure.total_volumn,
+                bollingerBands.getUpperBand(),
+                bollingerBands.getMiddleBand(),
+                bollingerBands.getLowerBand()
             )
         )
         
-        tradeController.placeOrder(dataStructure.symbol, Action.BUY.getAction(), 1)
+        #tradeController.placeOrder(dataStructure.symbol, Action.BUY.getAction(), 1)
         
-        print(tradeController.getProfile())
+        #print(tradeController.getProfile())
         
         '''
         <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
