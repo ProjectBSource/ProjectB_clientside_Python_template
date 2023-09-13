@@ -66,7 +66,6 @@ while True:
         You may write your back test program below within the while loop
         >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         '''
-        
         @#indicatoriesUpdateLogic#@
 
         @#baseLogicResult#@
