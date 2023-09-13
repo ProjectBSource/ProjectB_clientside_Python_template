@@ -68,11 +68,11 @@ while True:
         '''
 @#indicatoriesUpdateLogic#@
 
-        @#baseLogicResult#@
+@#baseLogicResult#@
         
-        @#logicGatewayResult#@
+@#logicGatewayResult#@
                                      
-        @#actionAndTradeLogic#@
+@#actionAndTradeLogic#@
         
         '''
         <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
