@@ -8,19 +8,19 @@ from TradeControl.TradeController import TradeController
 
 
 #Login here
-dataStreaming = SocketClient("funganything@gmail.com", "123")
+dataStreaming = SocketClient(/*email*/, /*password*/)
 
 #Form JSON object message for data streaming request
 dataStreamingRequest = {
-    "activity":"TickDataStreaming",
-    "market":"Future",
-    "index":"HSI",
-    "startdate":"20230101",
-    "enddate":"20230531",
-    "starttime":"000000",
-    "endtime":"235959",
-    "interval":59,
-    "mitigateNoiseWithinPrecentage":200
+    "activity":"@#activity#@",
+    "market":"@#market#@",
+    "index":"@#index#@",
+    "startdate":"@#startdate#@",
+    "enddate":"@#enddate#@",
+    "starttime":"@#starttime#@",
+    "endtime":"@#endtime#@",
+    "interval":@#interval#@-1,
+    "mitigateNoiseWithinPrecentage":@#mitigateNoiseWithinPrecentage#@
 }
 
 #Send the request to server
@@ -31,14 +31,15 @@ This template included a simple account and order management function
 You may modify the function to fit your back test
 '''
 tradeController = TradeController()
-tradeController.setSlippage(0.0005)
-
-bollingerBands = BollingerBands(20,2);
+tradeController.setSlippage(@#slippage#@)
 
 #Initial the ObjectMapper
 mapper = json.JSONDecoder()
 #Initial the JSONObject
 response = None
+    
+#Setup the indicatories you need here
+@#indicatories#@
 
 while True:
     #get the response
@@ -66,28 +67,13 @@ while True:
         >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         '''
         
-        bollingerBands.addPrice(dataStructure.index);
+        @#indicatoriesUpdateLogic#@
+
+        @#baseLogicResult#@
         
-        print(
-            "{} {} {} {} {} {} {} {} {} {} {} {}".format(
-                dataStructure.type,
-                dataStructure.datetime,
-                dataStructure.index,
-                dataStructure.volumn,
-                dataStructure.open,
-                dataStructure.high,
-                dataStructure.low,
-                dataStructure.close,
-                dataStructure.total_volumn,
-                bollingerBands.getUpperBand(),
-                bollingerBands.getMiddleBand(),
-                bollingerBands.getLowerBand()
-            )
-        )
-        
-        #tradeController.placeOrder(dataStructure.symbol, Action.BUY.getAction(), 1)
-        
-        #print(tradeController.getProfile())
+        @#logicGatewayResult#@
+                                     
+        @#actionAndTradeLogic#@
         
         '''
         <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
