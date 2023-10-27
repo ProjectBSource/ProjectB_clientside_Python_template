@@ -42,9 +42,10 @@ class TradeController:
     def placeOrder(self, symbol: str, action: str, quantity: int, direction=None, sp=None, ed=None):
         self.orders.append(Order(symbol, action, direction, sp, ed, quantity, None, None, None, None, False))
 
-    def placeOrder(self, symbol: str, action: str, direction=None, sp=None, ed=None):
+   def placeOrder(self, symbol: str, action: str, direction=None, sp=None, ed=None):
         self.tempOffQuantity = self.profile.holding[symbol]*-1
-        self.orders.append(Order(symbol, action, direction, sp, ed, self.tempOffQuantity, None, None, None, None, False))
+        if self.tempOffQuantity != 0:
+            self.orders.append(Order(symbol, action, direction, sp, ed, self.tempOffQuantity, None, None, None, None, False))
     
     def getProfile(self):
         profile_dict = self.profile.__dict__
