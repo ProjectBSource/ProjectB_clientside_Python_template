@@ -1,6 +1,6 @@
 [project]
 name = "ProjectB_clientside_template_package"
-version = "0.9"
+version = "1.0"
 authors = [
   { name="ProjectB", email="admin@projectb.click" },
 ]
