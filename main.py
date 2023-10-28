@@ -4,7 +4,7 @@ from ProjectB_clientside_template_package.Indicators.BollingerBands import Bolli
 from datetime import datetime
 
 class Main(MainController):
-    def logicHandler(dataStructure:DataStructure):
+    def logicHandler(self, dataStructure:DataStructure):
         bollingerBands.addPrice(dataStructure.index)
         print(
             "{} {} {} {} {} {} {} {} {} {} {} {}".format(
