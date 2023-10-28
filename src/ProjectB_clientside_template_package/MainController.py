@@ -26,9 +26,9 @@ class MainController(ABC):
         else:
             self.dataStreaming.request(dataStreamingRequest)
             
-    def projectBTradeController(slippageRangeInPercentage):
+    def projectBTradeController(self, slippageRangeInPercentage):
         tradeController = TradeController()
-        tradeController.setSlippage(0.0005)
+        tradeController.setSlippage(slippageRangeInPercentage)
     
     @abstractmethod
     def logicHandler(datastructure:DataStructure):
