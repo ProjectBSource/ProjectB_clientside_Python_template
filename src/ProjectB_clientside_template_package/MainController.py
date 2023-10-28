@@ -31,7 +31,7 @@ class MainController(ABC):
         self.tradeController.setSlippage(slippageRangeInPercentage)
     
     @abstractmethod
-    def logicHandler(datastructure:DataStructure):
+    def logicHandler(self, datastructure:DataStructure):
         pass
         
     def run(self):

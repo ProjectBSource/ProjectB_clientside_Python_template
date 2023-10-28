@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: ProjectB-clientside-template-package
-Version: 1.2
+Version: 1.3
 Summary: This is the pip package of ProjectB_clientside_template_package
 Author-email: ProjectB <admin@projectb.click>
 Project-URL: Homepage, https://github.com/ProjectBSource/ProjectB_clientside_JAVA_template/tree/change_TradeController_features_to_local
