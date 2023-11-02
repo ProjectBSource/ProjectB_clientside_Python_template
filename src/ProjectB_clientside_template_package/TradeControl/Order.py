@@ -9,7 +9,7 @@ import json
 
 
 class Order:
-    def __init__(self, symbol, action, direction, sp, ed, quantity, remained, traded, averageTradePrice, lastUpdateDateTime, historyNodeOrNot):
+    def __init__(self, symbol, action, direction, sp, ed, quantity, remained, traded, averageTradePrice, lastUpdateDateTime, historyNodeOrNot, oneTimeTradeCheck):
         self.symbol = symbol
         self.orderid = 1
         self.orderDateTime = (datetime.now()).strftime("%Y%m%d%H%M%S")
@@ -18,6 +18,8 @@ class Order:
         self.sp = sp
         self.ed = ed
         self.quantity = quantity
+        self.oneTimeTradeCheck = oneTimeTradeCheck
+
         if remained is None:
             self.remained = quantity
             self.traded = 0
