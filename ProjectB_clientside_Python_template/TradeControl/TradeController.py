@@ -1,8 +1,8 @@
 from typing import List, Union
-from ClientSocketControl import DataStructure
-from TradeControl.Order import Order
-from TradeControl.OrderActionConstants import Action, Direction, ExpiryDate, StrikePrice
-from TradeControl.Profile import Profile
+from ProjectB_clientside_template_package.ClientSocketControl import DataStructure
+from ProjectB_clientside_template_package.TradeControl.Order import Order
+from ProjectB_clientside_template_package.TradeControl.OrderActionConstants import Action, Direction, ExpiryDate, StrikePrice
+from ProjectB_clientside_template_package.TradeControl.Profile import Profile
 import json
 import random
 
@@ -10,7 +10,7 @@ import random
 class TradeController:
     def __init__(self):
         self.profile = Profile()
-        self.orders: List[Order] = []
+        self.orders = {}
         self.trade_notification_list = []
         self.trade_notification = None
         self.slippage = 0.0
@@ -39,15 +39,28 @@ class TradeController:
     def setSlippage(self, percentage: float):
         self.slippage = percentage
     
-    def placeOrder(self, symbol: str, action: str, quantity: int, direction=None, sp=None, ed=None):
-        self.orders.append(Order(symbol, action, direction, sp, ed, quantity, None, None, None, None, False))
+    def placeOrder(self, id: str, symbol: str, action: str, quantity: int, direction, sp, ed, oneTimeTradeCheck):
+        if id not in self.orders:
+            self.orders[id] = Order(symbol, action, direction, sp, ed, quantity, None, None, None, None, False, oneTimeTradeCheck)
+            return False
+        return True
 
-    def placeOrder(self, symbol: str, action: str, direction=None, sp=None, ed=None):
-        if len(self.profile.holding) > 0:
-            self.tempOffQuantity = self.profile.holding[symbol]*-1
-            if self.tempOffQuantity != 0:
-                self.orders.append(Order(symbol, action, direction, sp, ed, self.tempOffQuantity, None, None, None, None, False))
-    
+    def placeOFFOrder(self, targetId: str):
+        order = self.orders.get(targetId)
+        if order:
+            if self.profile.holding:
+                if order.symbol in self.profile.holding:
+                    if self.profile.holding[order.symbol] >= order.traded:
+                        # For non option trade off
+                        if order.action == Action.BUY:
+                            self.orders[targetId + "_OFF"] = Order(symbol, Action.SELL, direction, sp, ed, order.traded, None, None, None, None, False)
+                        elif order.action == Action.SELL:
+                            self.orders[targetId + "_OFF"] = Order(symbol, Action.BUY, direction, sp, ed, order.traded, None, None, None, None, False)
+                        return True
+                        if order.oneTimeTradeCheck==False:
+                            self.orders.pop(targetId)
+        return False
+
     def getProfile(self):
         profile_dict = self.profile.__dict__
         if profile_dict:
