@@ -39,13 +39,13 @@ class TradeController:
     def setSlippage(self, percentage: float):
         self.slippage = percentage
     
-    def placeOrder(self, id: str, symbol: str, action: str, quantity: int, direction, sp, ed):
+    def placeOrder(self, id: str, symbol: str, action: str, quantity: int, direction, sp, ed, oneTimeTradeCheck):
         if id not in self.orders:
-            self.orders[id] = Order(symbol, action, direction, sp, ed, quantity, None, None, None, None, False)
+            self.orders[id] = Order(symbol, action, direction, sp, ed, quantity, None, None, None, None, False, oneTimeTradeCheck)
             return False
         return True
 
-    def placeOFFOrder(self, targetId: str, symbol=None, action=None, direction=None, sp=None, ed=None):
+    def placeOFFOrder(self, targetId: str):
         order = self.orders.get(targetId)
         if order:
             if self.profile.holding:
@@ -57,6 +57,8 @@ class TradeController:
                         elif order.action == Action.SELL:
                             self.orders[targetId + "_OFF"] = Order(symbol, Action.BUY, direction, sp, ed, order.traded, None, None, None, None, False)
                         return True
+                        if order.oneTimeTradeCheck==False:
+                            self.orders.pop(targetId)
         return False
 
     def getProfile(self):
