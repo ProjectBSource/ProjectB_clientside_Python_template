@@ -9,9 +9,10 @@ import json
 
 
 class Order:
-    def __init__(self, symbol, action, direction, sp, ed, quantity, remained, traded, averageTradePrice, lastUpdateDateTime, historyNodeOrNot, oneTimeTradeCheck):
+    def __init__(self, orderAlias, symbol, action, direction, sp, ed, quantity, remained, traded, averageTradePrice, lastUpdateDateTime, historyNodeOrNot, oneTimeTradeCheck):
         self.symbol = symbol
-        self.orderid = 1
+        self.orderid = uuid.uuid4()
+        self.orderAlias = orderAlias
         self.orderDateTime = (datetime.now()).strftime("%Y%m%d%H%M%S")
         self.action = action
         self.direction = direction
@@ -42,8 +43,9 @@ class Order:
                     temp_trade_amount = min(data.volumn, self.remained)
                     self.traded += temp_trade_amount
                     self.remained -= temp_trade_amount
-                    temp_trade_price = data.index + ((data.index * slippage) * (1 if random.randint(0, 1) == 0 else -1))
+                    self.temp_trade_price = data.index + ((data.index * slippage) * (1 if random.randint(0, 1) == 0 else -1))
                     self.averageTradePrice = (self.averageTradePrice + (temp_trade_amount * temp_trade_price)) / self.traded
+                    self.orderFillDateTime = (datetime.now()).strftime("%Y%m%d%H%M%S")
                     self.history.append(json.dumps(self.__dict__))
                     # Update profile
                     if self.action == "SELL":
