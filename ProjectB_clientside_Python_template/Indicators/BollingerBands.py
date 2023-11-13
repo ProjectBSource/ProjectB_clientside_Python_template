@@ -1,6 +1,6 @@
 import math
 
-class BollingerBands:
+class BollingerBands(Indicator):
     def __init__(self, period, multiplier):
         self.prices = []
         self.period = period
@@ -10,6 +10,12 @@ class BollingerBands:
         self.prices.append(price)
         if len(self.prices) > self.period:
             self.prices.pop(0)
+    
+    def getPrice(self):
+        if len(self.prices) > 0:
+            return self.prices[-1]
+        else:
+            return 0
     
     def getUpperBand(self):
         sma = self.getSMA()
